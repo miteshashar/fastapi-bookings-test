@@ -1,7 +1,11 @@
+import imp
+from app.config import settings
 from fastapi import FastAPI
 
-app = FastAPI()
+from app.api import router
 
-@app.get("/ping")
-async def pong():
-    return {"ping": "pong!"}
+app = FastAPI(
+    title=settings.PROJECT_NAME
+)
+
+app.include_router(router)
