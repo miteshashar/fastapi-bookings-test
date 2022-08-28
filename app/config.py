@@ -1,6 +1,6 @@
 from functools import lru_cache
 from typing import Optional, Dict, Any
-from pydantic import BaseSettings, EmailStr, HttpUrl, PostgresDsn, validator
+from pydantic import BaseSettings, PostgresDsn, validator
 
 class Settings(BaseSettings):
     PROJECT_NAME: str
@@ -26,9 +26,18 @@ class Settings(BaseSettings):
     class Config:
         case_sensitive = True
         env_file = ".env"
-    
+
+class TestSettings(Settings):
+    class Config:
+        case_sensitive = True
+        env_file = "tests/.env"
+
 @lru_cache
 def get_settings():
     return Settings()
+
+@lru_cache
+def get_test_settings():
+    return TestSettings()
 
 settings = get_settings()
