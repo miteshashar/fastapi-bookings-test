@@ -1,5 +1,6 @@
+from http.client import UNSUPPORTED_MEDIA_TYPE
 from typing import Any, List
-from fastapi import APIRouter, Body, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException
 from fastapi.encoders import jsonable_encoder
 from app import crud, models, schemas
 from app.db import get_db
@@ -20,7 +21,7 @@ def read_users(
     return users
 
 
-@router.post("/", response_model=schemas.User)
+@router.post("/", response_model=schemas.User, status_code=201)
 def create_user(
     *,
     db: Session = Depends(get_db),
@@ -55,7 +56,7 @@ def read_user_by_id(
     return user
 
 
-@router.put("/{user_id}", response_model=schemas.User)
+@router.put("/{user_id}", response_model=schemas.User, status_code=201)
 def update_user(
     *,
     db: Session = Depends(get_db),
@@ -79,12 +80,12 @@ def update_user(
         )
     return crud.user.update(db, db_obj=user, obj_in=user_in)
 
-@router.delete("/{user_id}", response_model=schemas.User)
+@router.delete("/{user_id}", status_code=204)
 def delete_user(
     *,
     db: Session = Depends(get_db),
     user_id: int,
-    user_in: schemas.UserCreateUpdate
+    user_in: schemas.BaseModel
 ) -> Any:
     """
     Delete a user.
@@ -93,6 +94,6 @@ def delete_user(
     if not user:
         raise HTTPException(
             status_code=404,
-            detail="User not found",
+            detail="User not found.",
         )
-    return crud.user.remove(db, id=user_id)
+    crud.user.remove(db, id=user_id)

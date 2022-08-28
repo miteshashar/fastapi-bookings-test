@@ -12,7 +12,8 @@ class CRUDUser(CRUDBase[User, UserCreateUpdate, UserCreateUpdate]):
         return db.query(User).filter(User.username == username).first()
 
 class CRUDRoom(CRUDBase[Room, RoomCreateUpdate, RoomCreateUpdate]):
-    pass
+    def get_by_name(self, db: Session, *, name: str) -> Optional[Room]:
+        return db.query(Room).filter(Room.name == name).first()
 
 
 user = CRUDUser(User)
