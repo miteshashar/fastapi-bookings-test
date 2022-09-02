@@ -1,4 +1,5 @@
 from pydantic import BaseModel
+from datetime import date
 
 class UserBase(BaseModel):
     username: str
@@ -24,3 +25,9 @@ class Room(RoomBase):
     class Config:
         orm_mode = True
 
+class BookingBase(BaseModel):
+    user_id: int
+
+class BookingCreateUpdate(BookingBase):
+    date: date
+    room_id: int

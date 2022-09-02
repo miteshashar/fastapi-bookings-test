@@ -1,1 +1,1 @@
-from .crud import user, room
+from .crud import user, room, booking
